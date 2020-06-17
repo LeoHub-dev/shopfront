@@ -5,7 +5,8 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-4 mb-2" *ngFor="let product of productList">
-                <button type="button" class="btn btn-primary" (click)="addToCart(product.id)">{{ product.name }}</button>
+                <button type="button" class="btn btn-primary"
+                    (click)="addToCart(product.id)">{{ product.name }}</button>
             </div>
         </div>
     </div>
@@ -16,40 +17,37 @@
                     <th>Producto</th>
                     <th>Sku</th>
                     <th style="width:10%;">Cantidad</th>
-                    <th>Subtotal</th>
                     <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <div class="row">
-                            <div class="col-lg-2 Product-img">
-                                <img src="http://nicesnippets.com/demo/sc-images.jpg" alt="..."
-                                    class="img-responsive" />
+                <ng-container *ngIf="activeCart">
+                    <tr *ngFor="let cProduct of activeCart.products; let i = index">
+                        <td>
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <h4 class="nomargin">{{ cProduct.name }}</h4>
+                                    <p>{{ cProduct.description }}</p>
+                                </div>
                             </div>
-                            <div class="col-lg-10">
-                                <h4 class="nomargin">Lenovo K6 Power</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                    tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td> XXYYY </td>
-                    <td data-th="Quantity">
-                        <input type="number" class="form-control text-center" value="1">
-                    </td>
-                    <td>12,000</td>
-                    <td class="actions" data-th="" style="width:10%;">
-                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
-                    </td>
+                        </td>
+                        <td> {{ cProduct.sku }} </td>
+                        <td data-th="Quantity">
+                            <input type="number" class="form-control text-center" value="1" (keydown)="logChange($event, cProduct.id)" (change)="logChange($event, cProduct.id)">
+                        </td>
+                        <td class="actions" data-th="" style="width:10%;">
+                            <button class="btn btn-danger btn-sm" (click)="deleteFromCart(cProduct.id)"><i class="fa fa-trash-o"></i></button>
+                        </td>
+                    </tr>
+                </ng-container>
+                <tr *ngIf="activeCart && activeCart.products.length == 0">
+                    <td>No has agregado productos</td>
                 </tr>
             </tbody>
-            <tfoot>
+            <tfoot *ngIf="activeCart && activeCart.products.length > 0">
                 <tr>
-                    <td colspan="3" class="hidden-xs"></td>
-                    <td class="hidden-xs text-center" style="width:20%;"><strong>Total : 47,000</strong></td>
-                    <td>
+                    <td colspan="2" class="hidden-xs"></td>
+                    <td colspan="2">
                         <a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a>
                     </td>
                 </tr>

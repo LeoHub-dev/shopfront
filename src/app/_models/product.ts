@@ -3,4 +3,5 @@ export class Product {
     name: string;
     sku: string;
     description: string;
+    quantity: number;
 }
